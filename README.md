@@ -5,6 +5,7 @@ connection or just wants a simple way to store their favorite trails. When opene
 the user may open previosuly made files. The user can add new hikes which will then be added to the
 table for easy viewing.
 
-It is somewhat incomplete in it's current state. The open, save, and add buttons and I will be adding functionality
-to the rest soon. I also plan on implementing more ways to sort through the data, something like choosing a
-distance that you want the hikes to be more or less than.
+After this revision, the open, save, delete, and add buttons work while the edit and remove hike buttons
+do not. They will receive fundtionality in the next update. A completely new feature was added as well, 
+this being the recently added hike message in the top right. It will notify you on the last hike added
+using a priorityQueue. 
