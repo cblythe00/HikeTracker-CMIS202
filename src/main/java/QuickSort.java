@@ -15,7 +15,7 @@ public class QuickSort {
 
     public static void quickSort(int[] list, int first, int last) {
 
-        // I am using QuickSort here as it is the fastest, though i am not sure how i will implement it yet.
+        // I am using QuickSort here as it is the fastest, though I am not sure how I will implement it yet.
         // I'm thinking of using it for searches of hikes under a certain amount of miles or over a certain amount
         if (last > first) {
             int pivotIndex = partition(list, first, last);

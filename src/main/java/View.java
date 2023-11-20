@@ -22,11 +22,13 @@ public class View extends BorderPane {
     private Controller ctrl;
     private Model model;
     private Label hikeNameLabel, hikeDistanceLabel, hikeAltitudeLabel, hikeLocationLabel,
-            saveDescription, saveOutcome, openDescription, openOutcome, deleteDescription, deleteOutcome;
+            saveDescription, saveOutcome, openDescription, openOutcome, deleteDescription, deleteOutcome,
+            recentlyAddedLabel;
     private Button addHikeButton, addHikeButton2, editHikeButton, removeHikeButton,
             openFileButton, openFileButton2, saveFileButton, saveFileButton2, deleteFileButton, deleteFileButton2;
     private TextField hikeNameField, hikeDistanceField, hikeAltitudeField, hikeLocationField,
             saveFileField, openFileField, deleteFileField;
+    private ComboBox<String> removeHikeComboBox;
     private GridPane gridPane;
     private TableView<Trail> table;
     private HBox bottomHBox, topHBox;
@@ -69,6 +71,10 @@ public class View extends BorderPane {
 
         deleteOutcome = new Label("");
         ctrl.setDeleteOutcomeLabel(deleteOutcome);
+
+        recentlyAddedLabel = new Label("                                                                                " +
+                "                                                           Recently added: ");
+        ctrl.setRecentlyAddedLabel(recentlyAddedLabel);
     }
     private void createTextFields() {
 
@@ -94,7 +100,8 @@ public class View extends BorderPane {
         ctrl.setDeleteFileField(deleteFileField);
     }
     private void createComboBoxes() {
-
+        removeHikeComboBox = new ComboBox<>();
+        ctrl.setRemoveHikeComboBox(removeHikeComboBox);
     }
     private void createButtons() {
 
@@ -183,10 +190,11 @@ public class View extends BorderPane {
         createLabels();
         createButtons();
         createTableView();
+        createComboBoxes();
         createVBox();
         createHBox();
 
-        topHBox.getChildren().addAll(openFileButton, saveFileButton, deleteFileButton);
+        topHBox.getChildren().addAll(openFileButton, saveFileButton, deleteFileButton, recentlyAddedLabel);
         topHBox.setAlignment(Pos.TOP_LEFT);
         topHBox.setSpacing(50);
         setTop(topHBox);

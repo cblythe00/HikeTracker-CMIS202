@@ -11,10 +11,7 @@ import javafx.event.ActionEvent;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.TableView;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
@@ -36,7 +33,9 @@ public class Controller {
     private TextField hikeNameField, hikeDistanceField, hikeAltitudeField, hikeLocationField,
             saveFileField, openFileField, deleteFileField;
     private Label hikeNameLabel, hikeDistanceLabel, hikeAltitudeLabel, hikeLocationLabel,
-            saveDescriptionLabel, saveOutcomeLabel, openDescriptionLabel, openOutcomeLabel, deleteDescriptionLabel, deleteOutcomeLabel;
+            saveDescriptionLabel, saveOutcomeLabel, openDescriptionLabel, openOutcomeLabel, deleteDescriptionLabel, deleteOutcomeLabel,
+            recentlyAddedLabel;
+    private ComboBox<String> removeHikeComboBox;
     private TableView<Trail> table;
     private Trail mainTrail;
 //    private final File file = new File("projectText.txt");
@@ -160,6 +159,9 @@ public class Controller {
     public void setDeleteOutcomeLabel(Label deleteOutcomeLabel) {
         this.deleteOutcomeLabel = deleteOutcomeLabel;
     }
+    public void setRecentlyAddedLabel(Label recentlyAddedLabel) {
+        this.recentlyAddedLabel = recentlyAddedLabel;
+    }
 
     public void setHikeNameField(TextField hikeNameField) {
         this.hikeNameField = hikeNameField;
@@ -191,6 +193,9 @@ public class Controller {
 
     public void setTableView(TableView<Trail> table) {
         this.table = table;
+    }
+    public void setRemoveHikeComboBox(ComboBox<String> comboBox) {
+        this.removeHikeComboBox = comboBox;
     }
 
     public void onOpenFileButtonClicked(ActionEvent e) {
@@ -224,6 +229,9 @@ public class Controller {
 
             // if the file does exist, it is read and added trails are remade from the information
         } else {
+
+            table.getItems().clear();
+
             Scanner scan = new Scanner(fileName);
 
             while (scan.hasNext()) {
@@ -232,7 +240,7 @@ public class Controller {
             }
             String s2 = Arrays.toString(list.toArray());
             String s3 = s2.replaceAll("\\[", "").replaceAll("\\]", "");
-            System.out.println(s3 + "s3");
+//            System.out.println(s3 + "s3");
             String[] s4 = s3.split(",");
 
             for (int i = 0; i < s4.length; i++) {
@@ -242,11 +250,13 @@ public class Controller {
 
                 table.getItems().add(new Trail(s4[i].replaceAll("\\$", " "), s4[i + 1].replaceAll("\\$", " "),
                         s4[i + 2].replaceAll("\\$", " "), s4[i + 3].replaceAll("\\$", " ")));
-//                table.getItems().add(new Trail(s4[i], s4[i + 1], s4[i + 2], s4[i + 3]));
                 mainTrail.addHike(new Trail(s4[i], s4[i + 1], s4[i + 2], s4[i + 3]));
                 i += 3;
             }
             openOutcomeLabel.setText("Successfully opened");
+
+            recentlyAddedLabel.setText("                                                                                " +
+                    "                                                           Recently added: " + mainTrail.showRecents());
         }
     }
 
@@ -291,7 +301,7 @@ public class Controller {
             outFile.close();
             saveOutcomeLabel.setText("Successfully saved.");
 
-            System.out.println(s);
+//            System.out.println(s);
         }
     }
 
@@ -313,6 +323,24 @@ public class Controller {
     }
     public void onDeleteFileButton2Clicked(ActionEvent e) {
 
+        if (deleteFileField == null || deleteFileField.toString().trim().isEmpty()) {
+
+            saveOutcomeLabel.setText("Please enter a valid name.");
+
+        } else {
+
+            String s = deleteFileField.getText() + ".txt";
+
+            File file1 = new File(s);
+            if(!file1.exists()) {
+                deleteOutcomeLabel.setText("Could not find or delete file.");
+            }
+            else {
+                file1.delete();
+                deleteOutcomeLabel.setText("File has been deleted");
+                table.getItems().clear();
+            }
+        }
     }
 
     public void onAddHikeButtonClicked(ActionEvent event) {
@@ -360,8 +388,8 @@ public class Controller {
         Trail tempTrail = new Trail(hikeNameField.getText(), hikeDistanceField.getText(),
                 hikeAltitudeField.getText(), hikeLocationField.getText());
 
-        Trail tempTrail2 = new Trail(hikeNameField.getText().replaceAll(" ", "\\$"), hikeDistanceField.getText().replaceAll(" ", "\\$"),
-                hikeAltitudeField.getText().replaceAll(" ", "\\$"), hikeLocationField.getText().replaceAll(" ", "\\$"));
+//        Trail tempTrail2 = new Trail(hikeNameField.getText().replaceAll(" ", "\\$"), hikeDistanceField.getText().replaceAll(" ", "\\$"),
+//                hikeAltitudeField.getText().replaceAll(" ", "\\$"), hikeLocationField.getText().replaceAll(" ", "\\$"));
 
         if(hikeNameField.getText().trim().isEmpty() && hikeDistanceField.getText().trim().isEmpty() &&
                 hikeAltitudeField.getText().trim().isEmpty() && hikeLocationField.getText().trim().isEmpty()) {
@@ -370,9 +398,21 @@ public class Controller {
         }
         else {
             table.getItems().add(tempTrail);
-            mainTrail.addHike(tempTrail2);
+            mainTrail.addHike(hikeNameField.getText().replaceAll(" ", "\\$"), hikeDistanceField.getText().replaceAll(" ", "\\$"),
+                    hikeAltitudeField.getText().replaceAll(" ", "\\$"), hikeLocationField.getText().replaceAll(" ", "\\$"));
+
+//            mainTrail.addRecents(tempTrail);
+            recentlyAddedLabel.setText("                                                                                " +
+                    "                                                           Recently added: " + mainTrail.showRecents());
+
         }
 
+    }
+    public void onEditHikeButtonClicked(ActionEvent event) {
+
+    }
+    public void onRemoveHikeButtonClicked(ActionEvent event) {
+        
     }
 
     private void onTextChanged() {

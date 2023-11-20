@@ -21,13 +21,12 @@ public class Model {
     public Model() {
 
         List<String> lst = new ArrayList<>();
-
         trailList = FXCollections.observableList(lst);
     }
 
-//    public void addTrail(Trail t) {
-//
-//    }
+    public void addTrail(Trail t) {
+        trailList.add(t.getTrailName());
+    }
 
     public ObservableList<String> getTrailList() {
         return trailList;
